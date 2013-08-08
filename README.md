@@ -6,9 +6,9 @@ API to resize images. Proportions are maintained, which is a very good thing.
 Usage
 -----
 
-Issue a HTTP GET request to the endpoint `/api/v1/resize?img=&w=&h=`. For example:
+Issue a HTTP GET request to the endpoint `/api/v1/resize?url=&w=&h=`. For example:
 ```
-curl -v http://127.0.0.1:3000/api/v1/resize/http%3A%2F%2Fplacehold.it%2F350x150.jpg?w=175&h=75
+curl -v http://127.0.0.1:3000/api/v1/resize?url=http%3A%2F%2Fplacehold.it%2F350x150.jpg?w=175&h=75
 ```
 #### Query Parameter Notes
 
@@ -151,7 +151,7 @@ Future Directions/Issues
 ### Internal Refactorings
 
 * Structured exceptions, probably based on Exception::Class and Try::Tiny.
-* Store images to process in /tmp for user privacy. Currently, Mojo dislikes this even when its configured to serve static files from a specific path aside from its default of `public/`
+* Store images to process in /tmp for user privacy and auto-ish cleanup of old files. Currently, Mojo dislikes this even when its configured to serve static files from a specific path aside from its default of `public/`
 * Explore benefits of dealing only in filehandles, rather than paths.
 * Explore benefits of in-memory processing, rather than disk I/O.
 

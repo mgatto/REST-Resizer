@@ -55,7 +55,7 @@ get '/api/v1/resize' => sub {
     ) unless $RE{num}{decimal}->matches($new_height);
 
 
-    # get the resource; better to use a real UA string so servers in the wild
+    ## Get the resource; better to use a real UA string so servers in the wild
     # don't panic and refuse the request.
     my $grabber = Mojo::UserAgent->new()
         ->name('"Mozilla/5.0 (Windows NT 5.1; rv:22.0) Gecko/20100101 Firefox/22.0"')
@@ -99,10 +99,6 @@ get '/api/v1/resize' => sub {
 
     ## Return directly to client
     $self->render_static($image_name); # default is to serve from ./public
-
-    ## Don't fill up server with images, nor keep them around lest others get them.
-    unlink 'public/' . $image_name
-        or $self->log->warn("Could not delete resized image: $image_name");
 };
 
 
