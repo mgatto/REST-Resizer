@@ -51,7 +51,7 @@ get '/api/v1/resize' => sub {
     ) unless $RE{num}{decimal}->matches($new_width);
 
     return $self->render(
-        json => {error => sprintf("Bad Parameter: Height was %s; must be whole number or decimal", $new_width)}, status => 500
+        json => {error => sprintf("Bad Parameter: Height was %s; must be whole number or decimal", $new_height)}, status => 500
     ) unless $RE{num}{decimal}->matches($new_height);
 
 
