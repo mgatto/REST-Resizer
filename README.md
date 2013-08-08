@@ -10,16 +10,18 @@ Issue a HTTP GET request to the endpoint `/api/v1/resize?url=&w=&h=`. For exampl
 ```
 curl -v http://127.0.0.1:3000/api/v1/resize?url=http%3A%2F%2Fplacehold.it%2F350x150.jpg?w=175&h=75
 ```
+JPEG, PNG and GIF files are currently supported.
+
 #### Query Parameter Notes
 
 * The URL to the image must be URL encoded.
-* `w` is the new width, in pixles; must be either a whole number or decimal.
+* `w` is the new width, in pixels; must be either a whole number or decimal.
 * `h` is the new height, in pixels; must be either a whole number or decimal.
 
 ## Returned Content
 
 The HTTP response body is binary image data. The image format is specified by
-the Mime type in the Content-Type response header.
+the value of the Content-Type response header. This value is, naturally, a MIME type.
 
 #### Errors
 
@@ -59,15 +61,19 @@ You **must** have installed libraries for building the Imager CPAN module.
     yum install libpng-devel libtiff-devel giflib-devel, libjepg-devel freetype-devel
     ```
 * **FreeBSD:**
-    `pkg_add -r `, etc.
+    Use the Ports collection to install p5-Imager.
 * **OpenBSD:**
-    `pkg_add `, etc.
+    ```
+    pkg_add -r p5-Imager
+    ```
 * **Windows:**
     Imager comes bundled with Strawberry Perl. It can also be upgraded from
     CPAN with no issues found by this author when doing so.
 * **OSX:**
     Please see the Imager Docs (there seems to be much to do):
     https://metacpan.org/module/TONYC/Imager-0.97/lib/Imager/Install.pod
+
+After installing or confirming you have the required libraries, get the source code.
 
 ### Get Source Code
 
@@ -107,7 +113,6 @@ You may also run
 ```
 morbo resizer.pl
 ```
-But the daemon flag reloads updated code, which is good for shortening the dev cycle.
 
 Design Decisions
 ----------------
@@ -137,9 +142,8 @@ I chose Imager because,
 
 ##### HTTP Microframework
 
-Mojolicious has plenty of built-in support
-
-has no required CPAN dependencies. Some have critiqued this, but
+Mojolicious has plenty of built-in support for building REST applications. It
+also has no required CPAN dependencies. Some have critiqued this, but
 I'm fine with it since its fast. Also, a Mojolicious::Lite application can be
 easily upgraded to a full Mojo application as it grows.
 
@@ -151,9 +155,6 @@ Future Directions/Issues
 ### Internal Refactorings
 
 * Structured exceptions, probably based on Exception::Class and Try::Tiny.
-* Store images to process in /tmp for user privacy and auto-ish cleanup of old files. Currently, Mojo dislikes this even when its configured to serve static files from a specific path aside from its default of `public/`
+* Store images to process in /tmp for user privacy and auto-ish cleanup of old files. Currently, Mojo dislikes this even when its configured to serve static files from a specific path aside from its default of `public/`.
 * Explore benefits of dealing only in filehandles, rather than paths.
-* Explore benefits of in-memory processing, rather than disk I/O.
-
-    This could speed things up and reduce disk usage, but it would also swell
-    RAM requirements as it scales.
+* Explore benefits of in-memory processing, rather than disk I/O. This could speed things up and reduce disk usage, but it would also swell RAM requirements as it scales.
